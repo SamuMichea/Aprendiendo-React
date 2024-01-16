@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "workspaces":[
+  "workspaces": [
     "projects/*"
   ],
   "scripts": {
@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@s-ui/mono": "^2.43.0"
+    "@s-ui/mono": "^2.43.0",
+    "canvas-confetti": "1.9.2"
   }
 }
