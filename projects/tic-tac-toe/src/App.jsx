@@ -5,24 +5,38 @@ import { Square } from './components/Square'
 import { TURNS } from './constants'
 import { checkWinnerFrom, checkEndGame } from './logic/board'
 import { WinnerModal } from './components/WinnerModal'
+import { saveGameToStorage, resetGameStorage } from './logic/storage'
 
 function App() {
   
-  const [board, setBoard] = useState(Array(9).fill(null))
+  const [board, setBoard] = useState(() => {
+    const boardFromStorage = window.localStorage.getItem('board')
 
-  const [turn, setTurn] = useState(TURNS.X)
+    if (boardFromStorage) return JSON.parse(boardFromStorage)
+    return (Array(9).fill(null))
+
+  })
+
+  // 'USESTATE' NUNCA DEBE ESTAR DENTRO DE UN IF O ALGUNA VALIDACION
+  // DEBE ESTAR EN EL CUERPO DEL COMPONENTE
+  
+  const [turn, setTurn] = useState(()=>{
+    const turnFromStorage = window.localStorage.getItem('turn')
+    return turnFromStorage ?? TURNS.X
+  // ?? = mira si es que es NULL o UNDIFINED
+  // || = mira si es que es FALSE
+  })
   const [winner, setWinner] = useState(null) 
   // Null = no hay ganador, False hay empate
-
-  
 
   const resetGame = ()=>{
     setBoard(Array(9).fill(null))
     setTurn(TURNS.X)
     setWinner(null)
-  }
 
-  
+    resetGameStorage()
+
+  }
 
   const updateBoard = (index) => {
     // no actualizamos esta pos si ya tiene algo
@@ -34,7 +48,12 @@ function App() {
     // cambiamos el turno
     const newTurn = turn == TURNS.X ? TURNS.O : TURNS.X
     setTurn(newTurn)
-    // revisar si hay ganador
+    // guardar partida
+    saveGameToStorage({
+      board: newBoard,
+      newTurn: newTurn
+    })
+    
     const newWinner = checkWinnerFrom(newBoard)
     
     if (newWinner){
@@ -52,6 +71,7 @@ function App() {
       // Lo que da como resultado que al finalizar el juego, el estado siga siendo null
       // alert(`El ganador es ${newWinner}`)
   }
+  
 
   return (
     <main className='board'>
