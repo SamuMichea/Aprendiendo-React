@@ -15,5 +15,8 @@
   "dependencies": {
     "@s-ui/mono": "^2.43.0",
     "canvas-confetti": "1.9.2"
+  },
+  "devDependencies": {
+    "standard": "^17.1.0"
   }
 }
